@@ -7,7 +7,7 @@ package com.zl.imovie.network.http;
 
 public class HttpConstants {
 
-    private static final String ROOT_URL = "http://10.0.2.2:8080";
+    private static final String ROOT_URL = "http://172.17.70.77:8080";
 
     /**
      * 请求本地产品列表
@@ -32,7 +32,7 @@ public class HttpConstants {
     /**
      * 首页产品请求接口
      */
-    public static String HOME_RECOMMAND = ROOT_URL + "/imovie/home_data.json";
+    public static String HOME_RECOMMAND = ROOT_URL + "/imovie/home_data2.json";
 
     /**
      * 课程详情接口

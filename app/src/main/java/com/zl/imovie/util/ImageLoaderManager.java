@@ -3,6 +3,7 @@ package com.zl.imovie.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -12,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.zl.imovie.R;
 
 import java.net.ContentHandler;
@@ -92,8 +94,22 @@ public class ImageLoaderManager {
         return options;
     }
 
-    public void displayImage(){
+    public void displayImage(ImageView imageView, String url) {
+        if (mImageLoader != null) {
+            mImageLoader.displayImage(url, imageView);
+        }
+    }
 
+    public void displayImage(ImageView imageView, String url, ImageLoadingListener listener) {
+        if (mImageLoader != null) {
+            mImageLoader.displayImage(url, imageView, listener);
+        }
+    }
+
+    public void displayImage(ImageView imageView, String url, DisplayImageOptions options, ImageLoadingListener listener) {
+        if (mImageLoader != null) {
+            mImageLoader.displayImage(url, imageView, options, listener);
+        }
     }
 
 }

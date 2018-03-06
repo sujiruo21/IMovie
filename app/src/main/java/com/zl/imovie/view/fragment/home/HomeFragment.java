@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.zl.imoivesdk.okhttp.CommonOkhttpClient;
 import com.zl.imoivesdk.okhttp.listener.DisposeDataListener;
 import com.zl.imovie.R;
+import com.zl.imovie.adapter.CourseAdapter;
+import com.zl.imovie.module.recommand.BaseRecommandModel;
 import com.zl.imovie.network.http.RequestCenter;
 import com.zl.imovie.view.fragment.BaseFragment;
 
@@ -32,6 +34,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private TextView mSearchView;
     private ListView mListView;
     private ImageView mLoadingView;
+    private BaseRecommandModel mRecommendData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +46,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         RequestCenter.requestRecommendData(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
-                Log.e(TAG, "onSuccess: " + responseObj.toString());
+                mRecommendData = (BaseRecommandModel)responseObj;
+                showSuccessView();
             }
 
             @Override
@@ -51,6 +55,27 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 Log.e(TAG, "onFailure: " + reasonObj.toString());
             }
         });
+    }
+
+    /**
+     * 请求成功时执行的方法
+     */
+    private void showSuccessView() {
+        //判断返回数据是否为空
+        if(mRecommendData.data.list != null && mRecommendData.data.list.size() > 0){
+            mLoadingView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+            mListView.setAdapter(new CourseAdapter(mContext,mRecommendData.data.list));
+        }else {
+            showErrorView();
+        }
+    }
+
+    /**
+     * 请求失败执行的方法
+     */
+    private void showErrorView() {
+
     }
 
     @Nullable
