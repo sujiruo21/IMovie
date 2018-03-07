@@ -118,6 +118,7 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder.mProductLayout = (LinearLayout) convertView.findViewById(R.id.product_photo_layout);
                     break;
                 case CARD_VIEWPAGER:
+
                 case VIDEO_TYPE:
                 default:
                     mViewHolder = new ViewHolder();
