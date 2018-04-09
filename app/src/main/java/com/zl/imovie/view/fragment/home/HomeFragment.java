@@ -1,5 +1,7 @@
 package com.zl.imovie.view.fragment.home;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zl.imoivesdk.okhttp.CommonOkhttpClient;
 import com.zl.imoivesdk.okhttp.listener.DisposeDataListener;
@@ -19,6 +23,8 @@ import com.zl.imovie.adapter.CourseAdapter;
 import com.zl.imovie.module.recommand.BaseRecommandModel;
 import com.zl.imovie.network.http.RequestCenter;
 import com.zl.imovie.view.fragment.BaseFragment;
+import com.zl.imovie.view.home.HomeHeaderLayout;
+import com.zl.imovie.zxing.app.CaptureActivity;
 
 import static android.content.ContentValues.TAG;
 
@@ -36,6 +42,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private ImageView mLoadingView;
     private BaseRecommandModel mRecommendData;
 
+    private static final int REQUEST_QRCODE = 0x01;
+    private CourseAdapter mAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +55,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         RequestCenter.requestRecommendData(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
-                mRecommendData = (BaseRecommandModel)responseObj;
+                mRecommendData = (BaseRecommandModel) responseObj;
                 showSuccessView();
             }
 
@@ -62,11 +71,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void showSuccessView() {
         //判断返回数据是否为空
-        if(mRecommendData.data.list != null && mRecommendData.data.list.size() > 0){
+        if (mRecommendData.data.list != null && mRecommendData.data.list.size() > 0) {
             mLoadingView.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
-            mListView.setAdapter(new CourseAdapter(mContext,mRecommendData.data.list));
-        }else {
+            mListView.addHeaderView(new HomeHeaderLayout(mContext, mRecommendData.data.head));
+            mAdapter = new CourseAdapter(mContext, mRecommendData.data.list);
+            mListView.setAdapter(mAdapter);
+            mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    mAdapter.updateAdInScrollView();
+                }
+            });
+        } else {
             showErrorView();
         }
     }
@@ -103,11 +125,41 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.qrcode_view:
+                openCamera();
+                break;
+        }
+    }
 
+    /**
+     * 打开扫码页面CaptureActivity
+     */
+    private void openCamera() {
+        Intent intent = new Intent(mContext, CaptureActivity.class);
+        startActivityForResult(intent, REQUEST_QRCODE);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_QRCODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    //通过CaptureActivityHandler处理的消息decoded_success，将Intent的标志设置为SCAN_RESULT
+                    String code = data.getStringExtra("SCAN_RESULT");
+                    if (code.contains("http") || code.contains("https")) {
+                        Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
     }
 }

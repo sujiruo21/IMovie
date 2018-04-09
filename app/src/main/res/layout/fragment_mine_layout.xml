@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/login_layout"
@@ -11,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        >
+        android:paddingTop="15dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/photo_view"
@@ -20,8 +18,7 @@
             android:layout_height="80dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/default_user_avatar"
-            />
+            android:src="@drawable/default_user_avatar" />
 
         <TextView
             android:id="@+id/login_info_view"
@@ -32,8 +29,7 @@
             android:layout_toRightOf="@+id/photo_view"
             android:text="@string/unlogin"
             android:textColor="@color/color_333333"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/login_view"
@@ -46,8 +42,7 @@
             android:padding="10dp"
             android:text="@string/login_now"
             android:textColor="@color/color_333333"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
@@ -57,8 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:paddingBottom="15dp"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_photo_view"
@@ -67,14 +61,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:src="@drawable/default_user_avatar"
-            />
+            android:src="@drawable/default_user_avatar" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            >
+            android:layout_centerVertical="true">
+
             <TextView
                 android:id="@+id/username_view"
                 android:layout_width="wrap_content"
@@ -82,8 +75,8 @@
                 android:layout_marginLeft="20dp"
                 android:text="tyt114"
                 android:textColor="@color/color_333333"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/tick_view"
                 android:layout_width="wrap_content"
@@ -93,22 +86,20 @@
                 android:layout_marginTop="7dp"
                 android:text="tyt114"
                 android:textColor="@color/color_cdcdcd"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
         </RelativeLayout>
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="20dp"
-        android:background="@color/color_cdcdcd"
-        />
+        android:background="@color/color_cdcdcd" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/color_cccccc"
-        />
+        android:background="@color/color_cccccc" />
 
     <TextView
         android:id="@+id/video_setting_view"
@@ -121,15 +112,13 @@
         android:paddingTop="15dp"
         android:text="@string/video_play_setting"
         android:textColor="@color/color_333333"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="20dp"
-        android:background="@color/color_cdcdcd"
-        />
+        android:background="@color/color_cdcdcd" />
 
     <TextView
         android:id="@+id/share_imooc_view"
@@ -142,15 +131,13 @@
         android:paddingTop="15dp"
         android:text="@string/share_imooc"
         android:textColor="@color/color_333333"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="20dp"
-        android:background="@color/color_cdcdcd"
-        />
+        android:background="@color/color_cdcdcd" />
 
     <TextView
         android:id="@+id/my_qrcode_view"
@@ -163,15 +150,14 @@
         android:paddingTop="15dp"
         android:text="@string/my_qrcode"
         android:textColor="@color/color_333333"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="20dp"
-        android:background="@color/color_cdcdcd"
-        />
+        android:background="@color/color_cdcdcd" />
+
     <TextView
         android:id="@+id/update_view"
         android:layout_width="match_parent"
@@ -183,12 +169,10 @@
         android:paddingTop="15dp"
         android:text="@string/update_info"
         android:textColor="@color/color_333333"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/color_cdcdcd"
-        />
+        android:background="@color/color_cdcdcd" />
 </LinearLayout>

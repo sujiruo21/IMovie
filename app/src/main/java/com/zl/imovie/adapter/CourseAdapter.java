@@ -1,6 +1,8 @@
 package com.zl.imovie.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.renderscript.Sampler;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,10 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.zl.imoivesdk.activity.AdBrowserActivity;
+import com.zl.imoivesdk.core.AdContextInterface;
+import com.zl.imoivesdk.core.video.VideoManager;
 import com.zl.imoivesdk.iutil.Utils;
 import com.zl.imovie.R;
 import com.zl.imovie.module.recommand.RecommandBodyValue;
 import com.zl.imovie.util.ImageLoaderManager;
+import com.zl.imovie.util.Util;
 
 import java.util.ArrayList;
 
@@ -45,6 +52,7 @@ public class CourseAdapter extends BaseAdapter {
 
     //异步图片加载工具类
     private ImageLoaderManager mImageLoader;
+    private VideoManager mViedoManager;
 
     public CourseAdapter(Context mContext, ArrayList<RecommandBodyValue> mData) {
         this.mContext = mContext;
@@ -118,8 +126,45 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder.mProductLayout = (LinearLayout) convertView.findViewById(R.id.product_photo_layout);
                     break;
                 case CARD_VIEWPAGER:
-
+                    mViewHolder = new ViewHolder();
+                    convertView = mInflater.inflate(R.layout.item_product_card_viewpager_layout, parent, false);
+                    mViewHolder.mViewPager = convertView.findViewById(R.id.pager);
+                    ArrayList<RecommandBodyValue> recommandList = Util.handleData(value);
+                    mViewHolder.mViewPager.setPageMargin(Utils.dip2px(mContext, 12));
+                    mViewHolder.mViewPager.setAdapter(new HotSalePagerAdapter(mContext, recommandList));
+                    mViewHolder.mViewPager.setCurrentItem(recommandList.size() * 100);
+                    break;
                 case VIDEO_TYPE:
+                    //显示video卡片
+                    mViewHolder = new ViewHolder();
+                    convertView = mInflater.inflate(R.layout.item_video_layout, parent, false);
+                    mViewHolder.mVieoContentLayout = (RelativeLayout)
+                            convertView.findViewById(R.id.video_ad_layout);
+                    mViewHolder.mLogoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
+                    mViewHolder.mTitleView = (TextView) convertView.findViewById(R.id.item_title_view);
+                    mViewHolder.mInfoView = (TextView) convertView.findViewById(R.id.item_info_view);
+                    mViewHolder.mFooterView = (TextView) convertView.findViewById(R.id.item_footer_view);
+                    mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
+                    //为对应布局创建播放器
+                    mViedoManager = new VideoManager(mViewHolder.mVieoContentLayout,
+                            new Gson().toJson(value), null);
+                    mViedoManager.setAdResultListener(new AdContextInterface() {
+                        @Override
+                        public void onAdSuccess() {
+                        }
+
+                        @Override
+                        public void onAdFailed() {
+                        }
+
+                        @Override
+                        public void onClickVideo(String url) {
+                            Intent intent = new Intent(mContext, AdBrowserActivity.class);
+                            intent.putExtra(AdBrowserActivity.KEY_URL, url);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
                 default:
                     mViewHolder = new ViewHolder();
                     convertView = mInflater.inflate(R.layout.item_product_card_signal_pic_layout, parent, false);
@@ -156,6 +201,28 @@ public class CourseAdapter extends BaseAdapter {
                 for (String url : value.url) {
                     mViewHolder.mProductLayout.addView(createImageView(url));
                 }
+            case CARD_VIEWPAGER:
+                break;
+            case VIDEO_TYPE:
+                mImageLoader.displayImage(mViewHolder.mLogoView, value.logo);
+                mViewHolder.mTitleView.setText(value.title);
+                mViewHolder.mInfoView.setText(value.info.concat(mContext.getString(R.string.tian_qian)));
+                mViewHolder.mFooterView.setText(value.text);
+//                mViewHolder.mShareView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        ShareDialog dialog = new ShareDialog(mContext, false);
+//                        dialog.setShareType(Platform.SHARE_VIDEO);
+//                        dialog.setShareTitle(value.title);
+//                        dialog.setShareTitleUrl(value.site);
+//                        dialog.setShareText(value.text);
+//                        dialog.setShareSite(value.title);
+//                        dialog.setShareTitle(value.site);
+//                        dialog.setUrl(value.resource);
+//                        dialog.show();
+//                    }
+//                });
+                break;
         }
         return convertView;
     }
@@ -173,6 +240,16 @@ public class CourseAdapter extends BaseAdapter {
         imageView.setLayoutParams(params);
         mImageLoader.displayImage(imageView, url);
         return imageView;
+    }
+
+    /**
+     *     自动播放方法
+     */
+
+    public void updateAdInScrollView() {
+        if (mViedoManager != null) {
+            mViedoManager.updateAdInScrollView();
+        }
     }
 
     /**

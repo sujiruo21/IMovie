@@ -2,6 +2,8 @@ package com.zl.imovie.application;
 
 import android.app.Application;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by zl on 18-3-3.
  * 1.整个程序的入口
@@ -18,9 +20,15 @@ public class IMovieApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
+        initPush();
     }
 
     public static IMovieApplication getInstance(){
         return mApplication;
+    }
+
+    public void initPush(){
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 }
